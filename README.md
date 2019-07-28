@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/ejcx/passgo.svg?branch=master)](https://travis-ci.org/ejcx/passgo)
+[![Build Status](https://travis-ci.org/4ydx/passgo.svg?branch=master)](https://travis-ci.org/4ydx/passgo)
 # passgo
 stores, retrieves, generates, and synchronizes passwords and files securely and is written in Go! It is inspired by https://passwordstore.org but has a few key differences. The most important difference is passgo is not GPG based. Instead it uses a master password to securely store your passwords. It also supports encrypting arbitrary files.
 
-passgo is meant to be secure enough that you can publicly post your vault. I've started publishing my passwords [here](https://github.com/ejcx/passwords.git).
+passgo is meant to be secure enough that you can publicly post your vault. I've started publishing my passwords [here](https://github.com/4ydx/passwords.git).
 
 ## Getting started with passgo
 
@@ -17,7 +17,7 @@ export PATH=$PATH:$GOPATH/bin
 Then you can download gopass, its dependencies and install them all with one command:
 
 ```bash
-go get github.com/ejcx/passgo
+go get github.com/4ydx/passgo
 ```
 
 Next create a vault to store passwords in and a master password:
@@ -152,7 +152,7 @@ The integrity subcommand is used to manually generate and save the integrity has
 passgo can sync your password store to a remote git repository. The remote subcommand is used to add a git remote to your local passgo git repository.
 
 ```
-$ passgo remote https://github.com/ejcx/password-vault.git
+$ passgo remote https://github.com/4ydx/password-vault.git
 $ passgo insert work/email
 Enter password for work/email:
 $ passgo push
@@ -180,7 +180,7 @@ $ passgo
 Clone a remote passgo git repository and set it as your local password store.
 
 ```
-$ passgo clone https://github.com/ejcx/password-vault.git
+$ passgo clone https://github.com/4ydx/password-vault.git
 $ passgo
 ├──asdf
 |  └──bb

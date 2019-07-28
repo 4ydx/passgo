@@ -8,15 +8,15 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ejcx/passgo/edit"
-	"github.com/ejcx/passgo/generate"
-	"github.com/ejcx/passgo/initialize"
-	"github.com/ejcx/passgo/insert"
-	"github.com/ejcx/passgo/pc"
-	"github.com/ejcx/passgo/pcsv"
-	"github.com/ejcx/passgo/pio"
-	"github.com/ejcx/passgo/show"
-	"github.com/ejcx/passgo/sync"
+	"github.com/4ydx/passgo/edit"
+	"github.com/4ydx/passgo/generate"
+	"github.com/4ydx/passgo/initialize"
+	"github.com/4ydx/passgo/insert"
+	"github.com/4ydx/passgo/pc"
+	"github.com/4ydx/passgo/pcsv"
+	"github.com/4ydx/passgo/pio"
+	"github.com/4ydx/passgo/show"
+	"github.com/4ydx/passgo/sync"
 )
 
 const (
@@ -175,7 +175,7 @@ func main() {
 		show.Site(path, *copyPass)
 	case "shows":
 		path := getSubArguments(flag.Args(), 1)
-		show.SubMatch(path, *copyPass)
+		show.SubMatch(path, false)
 	case "insertfile":
 		allArgs := getSubArguments(subArgs, ALLARGS)
 		argList := strings.Split(allArgs, " ")

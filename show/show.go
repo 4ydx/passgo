@@ -10,8 +10,8 @@ import (
 	"runtime"
 	"strings"
 
-	"github.com/ejcx/passgo/pc"
-	"github.com/ejcx/passgo/pio"
+	"github.com/4ydx/passgo/pc"
+	"github.com/4ydx/passgo/pio"
 )
 
 type searchType int
@@ -83,6 +83,8 @@ func SubMatch(path string, copyPassword bool) {
 		fmt.Printf("Site with path %s not found", path)
 		return
 	}
+	fmt.Printf("%d matches\n", len(allSites))
+
 	masterPrivKey := pc.GetMasterKey()
 	showPassword(allSites, masterPrivKey, copyPassword)
 	handleErrors(allErrors)
@@ -98,6 +100,7 @@ func ListAll() {
 func showPassword(allSites map[string][]pio.SiteInfo, masterPrivKey [32]byte, copyPassword bool) {
 	for _, siteList := range allSites {
 		for _, site := range siteList {
+			fmt.Printf("\n---- %s\n", site.Name)
 			var unsealed []byte
 			var notes [][]byte
 			var err error
@@ -220,7 +223,7 @@ func SearchAll(st searchType, searchFor string) (allSites map[string][]pio.SiteI
 		if slashIndex > 0 {
 			group = string(s.Name[:slashIndex])
 		}
-		name := s.Name[slashIndex+1:]
+		name := s.Name
 		pass := s.PassSealed
 		notes := s.NotesSealed
 		pubKey := s.PubKey
@@ -244,11 +247,10 @@ func SearchAll(st searchType, searchFor string) (allSites map[string][]pio.SiteI
 			}
 		} else if st == ShowMatch {
 			if strings.Contains(name, searchFor) {
-				return map[string][]pio.SiteInfo{
-					group: []pio.SiteInfo{
-						si,
-					},
-				}, allErrors
+				if allSites[group] == nil {
+					allSites[group] = []pio.SiteInfo{}
+				}
+				allSites[group] = append(allSites[group], si)
 			}
 		} else if st == All {
 			if allSites[group] == nil {
