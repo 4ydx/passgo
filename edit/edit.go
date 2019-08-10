@@ -75,18 +75,29 @@ func Edit(path string) {
 		if siteInfo.Name == path {
 			var notes [][]byte
 			if siteInfo.NotesSealed == nil {
-				newPass, err = pio.PromptPass(fmt.Sprintf("Enter new password for %s", path))
+				newPass, err = pio.PromptPass(fmt.Sprintf("Enter new password for %s (no notes present)", path))
 				if err != nil {
 					log.Fatalf("Could not get new password for %s: %s", path, err)
 				}
 			} else {
-				// existing notes must be decrypted
-				masterPrivKey := pc.GetMasterKey()
+				masterPrivKey, currentPassword := pc.GetMasterKey()
 
-				newPass, err = pio.PromptPass(fmt.Sprintf("Enter new password for %s", path))
+				// ask the user if they want to keep the current password
+				s, err := pio.Prompt("Update the password(Y/n)? ")
 				if err != nil {
-					log.Fatalf("Could not get new password for %s: %s", path, err)
+					log.Fatalf("Could not get user response: %s", err.Error())
 				}
+				if s == "" || s == "y" || s == "Y" {
+					newPass, err = pio.PromptPass(fmt.Sprintf("Enter new password for %s", path))
+					if err != nil {
+						log.Fatalf("Could not get new password for %s: %s", path, err)
+					}
+				} else {
+					fmt.Println("Using existing password.")
+					newPass = currentPassword
+				}
+
+				// decrypt existing notes
 				for jj := 0; jj < len(siteInfo.NotesSealed); jj++ {
 					note, err := pc.OpenAsym(siteInfo.NotesSealed[jj], &siteInfo.PubKey, &masterPrivKey)
 					if err != nil {
@@ -105,6 +116,7 @@ func Edit(path string) {
 			if newPass == "" {
 				log.Fatal("Empty passwords are not permitted.  Aborting.")
 			}
+			// reencrypt offers the opportunity to add new notes
 			newSiteInfo := reencrypt(siteInfo, newPass, notes)
 			vault[jj] = newSiteInfo
 			err = pio.UpdateVault(vault)
