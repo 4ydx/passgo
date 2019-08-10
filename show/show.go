@@ -71,7 +71,7 @@ func Site(path string, copyPassword bool) {
 		fmt.Printf("Site with path %s not found", path)
 		return
 	}
-	masterPrivKey, _ := pc.GetMasterKey()
+	masterPrivKey := pc.GetMasterKey()
 	showPassword(allSites, masterPrivKey, copyPassword)
 	handleErrors(allErrors)
 }
@@ -85,7 +85,7 @@ func SubMatch(path string, copyPassword bool) {
 	}
 	fmt.Printf("%d matches\n", len(allSites))
 
-	masterPrivKey, _ := pc.GetMasterKey()
+	masterPrivKey := pc.GetMasterKey()
 	showPassword(allSites, masterPrivKey, copyPassword)
 	handleErrors(allErrors)
 }

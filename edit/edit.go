@@ -80,7 +80,7 @@ func Edit(path string) {
 					log.Fatalf("Could not get new password for %s: %s", path, err)
 				}
 			} else {
-				masterPrivKey, currentPassword := pc.GetMasterKey()
+				masterPrivKey := pc.GetMasterKey()
 
 				// ask the user if they want to keep the current password
 				s, err := pio.Prompt("Update the password(Y/n)? ")
@@ -93,8 +93,12 @@ func Edit(path string) {
 						log.Fatalf("Could not get new password for %s: %s", path, err)
 					}
 				} else {
-					fmt.Println("Using existing password.")
-					newPass = currentPassword
+					pass, err := pc.OpenAsym(siteInfo.PassSealed, &siteInfo.PubKey, &masterPrivKey)
+					if err != nil {
+						log.Fatalf("Could not decrypt site note.")
+					}
+					newPass = string(pass)
+					fmt.Printf("Using existing password %s\n", newPass)
 				}
 
 				// decrypt existing notes
