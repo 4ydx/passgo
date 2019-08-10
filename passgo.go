@@ -98,16 +98,9 @@ var (
 `
 )
 
-func SubArgs(args []string) (subArgs []string, multiline bool) {
+func SubArgs(args []string) (subArgs []string) {
 	subArgs = args[1:]
-	for jj, arg := range subArgs {
-		if arg == "-m" || arg == "--multi" {
-			multiline = true
-			subArgs = append(subArgs[:jj], subArgs[jj+1:]...)
-			jj--
-		}
-	}
-	return subArgs, multiline
+	return subArgs
 }
 
 func main() {
@@ -123,14 +116,14 @@ func main() {
 	}
 
 	// subArgs is used by subcommands to retreive only their args.
-	subArgs, multiline := SubArgs(flag.Args())
+	subArgs := SubArgs(flag.Args())
 	switch flag.Args()[0] {
 	case "import":
 		path := getSubArguments(subArgs, ALLARGS)
 		pcsv.Import(path)
 	case "edit":
 		path := getSubArguments(subArgs, ALLARGS)
-		edit.Edit(path, multiline)
+		edit.Edit(path)
 	case "ls", "find":
 		path := getSubArguments(subArgs, ALLARGS)
 		show.Find(path)
@@ -146,7 +139,7 @@ func main() {
 		initialize.Init()
 	case "insert":
 		pathName := getSubArguments(subArgs, ALLARGS)
-		insert.Password(pathName, multiline)
+		insert.Password(pathName)
 	case "integrity":
 		pc.GetSitesIntegrity()
 		sync.Commit(sync.IntegrityCommit)

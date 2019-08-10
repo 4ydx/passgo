@@ -17,29 +17,7 @@ func StandardArgs(t *testing.T, args []string) {
 }
 
 func TestNotMultiline(t *testing.T) {
-	var multiline bool
 	args := []string{"passgo", "insert", "site-path"}
-	args, multiline = SubArgs(args)
-	if multiline {
-		t.Fatal("Not a multiline command")
-	}
-	StandardArgs(t, args)
-}
-
-func TestMultiline(t *testing.T) {
-	var multiline bool
-	args := []string{"passgo", "insert", "-m", "site-path"}
-	args, multiline = SubArgs(args)
-	if !multiline {
-		t.Fatal("Expecting multiline command")
-	}
-	StandardArgs(t, args)
-
-	multiline = false
-	args = []string{"passgo", "insert", "--multi", "site-path"}
-	args, multiline = SubArgs(args)
-	if !multiline {
-		t.Fatal("Expecting multiline command")
-	}
+	args = SubArgs(args)
 	StandardArgs(t, args)
 }
